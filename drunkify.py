@@ -12,7 +12,8 @@
 # each word operation needs a boolean function to test?
 
 import random
-
+import string
+import copy
 
 VOWELS = set(['a','e','i','o','u'])
 
@@ -92,17 +93,20 @@ TABLE = {'vowelswap':vowelswap, 'letterswap':letterswap, 'double':double,
 
 # Putting it all together
 # what to do about punctuation?
-def drunkify(string, drunklevel):
+def drunkify(in_string, drunklevel):
     '''
     string - any string
     drunklevel - a float/int, which is interpreted as the expected probability of
     one word being changed
     '''
-    string = string.lower()
+    # remove uppercase, remove vowels
+    in_string = copy.copy(in_string)
+    in_string = in_string.lower()
+    in_string = in_string.translate(None, string.punctuation)
     # split string into words
-    string_list = string.split()
+    string_list = in_string.split()
+    # remove punctuation
     num_words_to_change = int(drunklevel*len(string_list))
-    print num_words_to_change
     for i in range(num_words_to_change):
         index = random.choice(range(len(string_list)))
         changed = None
@@ -112,4 +116,22 @@ def drunkify(string, drunklevel):
         string_list[index] = changed
     return ' '.join(string_list)
 
-print drunkify('now that the airsealers have taught me the amazing technique of putting things near cracks its amazing how much you can find out', 10)
+def play_drunkify():
+    while True:
+        drunklevel = int(raw_input('How drunk are you? (as a number): '))
+        phrase = raw_input('Say something, or "quit" to quit: ')
+        if phrase == 'quit':
+            break
+        print drunkify(phrase, drunklevel)
+
+def parse_drunkness(in_string):
+    '''Given an input, parses the drunkedness level of player'''
+    try:
+        return int(in_string)
+    except:
+        pass
+
+if __name__ == '__main__':
+    play_drunkify()
+        
+    
