@@ -1,15 +1,4 @@
 # Let's practice using a dispatch design pattern!
-# goal: take a string, split it into words
-# for each of those words, randomly "drunkify" them
-# then paste them back into a paragraph
-
-# Misspellings: replace vowel with another vowel, delete a double letter
-# Add multiple letters, d -> g, swap letters
-# Want to test whether the word can be altered before altering it.
-# Randomly choose a word to be altered
-# copying from _dispatch in courseware/access
-# where do I check if function works on word? In the function
-# each word operation needs a boolean function to test?
 
 import random
 import string
@@ -81,15 +70,17 @@ def delete_double(word):
         word_list.pop(random_double)
         return ''.join(word_list)
 
-def insert_g(word):
+TO_INSERT = ['g', 'p']
+def insert_letter(word):
     word_list = list(word)
     random_index = random.choice(range(len(word)))
-    word_list.insert(random_index, 'g')
+    random_letter = random.choice(TO_INSERT)
+    word_list.insert(random_index, random_letter)
     return ''.join(word_list)
 
 # This dictionary needs to be at the end for the function names to be defined
 TABLE = {'vowelswap':vowelswap, 'letterswap':letterswap, 'double':double,
-         'delete_double':delete_double, 'insert_g':insert_g}
+         'delete_double':delete_double, 'insert_letter':insert_letter}
 
 # Putting it all together
 # what to do about punctuation?
@@ -98,8 +89,11 @@ def drunkify(in_string, drunklevel):
     string - any string
     drunklevel - a float/int, which is interpreted as the expected probability of
     one word being changed
+    take a string, split it into words
+    for each of those words, randomly "drunkify" them
+    then paste them back into a paragraph
     '''
-    # remove uppercase, remove vowels
+    # remove uppercase, remove punctuation
     in_string = copy.copy(in_string)
     in_string = in_string.lower()
     in_string = in_string.translate(None, string.punctuation)
@@ -126,10 +120,8 @@ def play_drunkify():
 
 INTENSIFIER = {'very':0.5, 'really':0.5, 'tipsy':0.5, 'buzzed':0.5,
                'drunk':1.0, 'intoxicated':1.0,
-               'sloshed':2.0, 'roxy':2.0, 'wasted':2.0, 'smashed':2.0,}
-##050_INTENSIFIER = set(['very','really','tipsy','buzzed'])
-##100_INTENSIFIER = set(['drunk', 'intoxicated'])
-##200_INTENSIFIER = set(['sloshed','wasted','plastered','smashed'])
+               'sloshed':2.0, 'roxy':2.0, 'wasted':2.0, 'smashed':2.0,
+               'plastered':2.0}
 
 def parse_drunkness(in_string):
     '''Given an input, parses the drunkedness level of player'''
@@ -150,5 +142,5 @@ def parse_drunkness(in_string):
 
 if __name__ == '__main__':
     play_drunkify()
-        
-    
+
+ 
