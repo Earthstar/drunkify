@@ -118,18 +118,35 @@ def drunkify(in_string, drunklevel):
 
 def play_drunkify():
     while True:
-        drunklevel = int(raw_input('How drunk are you? (as a number): '))
+        drunklevel = parse_drunkness(raw_input('How drunk are you?: '))
         phrase = raw_input('Say something, or "quit" to quit: ')
         if phrase == 'quit':
             break
         print drunkify(phrase, drunklevel)
+
+INTENSIFIER = {'very':0.5, 'really':0.5, 'tipsy':0.5, 'buzzed':0.5,
+               'drunk':1.0, 'intoxicated':1.0,
+               'sloshed':2.0, 'roxy':2.0, 'wasted':2.0, 'smashed':2.0,}
+##050_INTENSIFIER = set(['very','really','tipsy','buzzed'])
+##100_INTENSIFIER = set(['drunk', 'intoxicated'])
+##200_INTENSIFIER = set(['sloshed','wasted','plastered','smashed'])
 
 def parse_drunkness(in_string):
     '''Given an input, parses the drunkedness level of player'''
     try:
         return int(in_string)
     except:
-        pass
+        '''Calculate drunkedness based on words in description
+        '''
+        in_string = in_string.lower()
+        split_string = in_string.split()
+        drunklevel = 0
+        for word in split_string:
+            if word == 'not':
+                pass
+            if word in INTENSIFIER:
+                drunklevel += INTENSIFIER[word]
+        return drunklevel
 
 if __name__ == '__main__':
     play_drunkify()
