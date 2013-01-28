@@ -3,6 +3,7 @@
 import random
 import string
 import copy
+import math
 
 VOWELS = set(['a','e','i','o','u'])
 
@@ -100,7 +101,7 @@ def drunkify(in_string, drunklevel):
     # split string into words
     string_list = in_string.split()
     # remove punctuation
-    num_words_to_change = int(drunklevel*len(string_list))
+    num_words_to_change = int(math.ceil(drunklevel*len(string_list)))
     for i in range(num_words_to_change):
         index = random.choice(range(len(string_list)))
         changed = None
@@ -111,8 +112,8 @@ def drunkify(in_string, drunklevel):
     return ' '.join(string_list)
 
 def play_drunkify():
+    drunklevel = parse_drunkness(raw_input('How drunk are you? '))
     while True:
-        drunklevel = parse_drunkness(raw_input('How drunk are you?: '))
         phrase = raw_input('Say something, or "quit" to quit: ')
         if phrase == 'quit':
             break
@@ -126,7 +127,7 @@ INTENSIFIER = {'very':0.5, 'really':0.5, 'tipsy':0.5, 'buzzed':0.5,
 def parse_drunkness(in_string):
     '''Given an input, parses the drunkedness level of player'''
     try:
-        return int(in_string)
+        return float(in_string)
     except:
         '''Calculate drunkedness based on words in description
         '''
