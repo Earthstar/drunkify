@@ -84,7 +84,33 @@ TABLE = {'vowelswap':vowelswap, 'letterswap':letterswap, 'double':double,
          'delete_double':delete_double, 'insert_letter':insert_letter}
 
 # Putting it all together
-# what to do about punctuation?
+# Change the drunkify algorithm so that some changes are more likely than
+# others
+# Create dictionary of 'function': integer, such that the probability of
+# choosing a particular thing is num/total num?
+# Easier to have absolute probabilities, and use random.random()
+# sums of probabilities must equal 1
+
+PROBABILITY_TABLE = [(0.5, 'vowelswap'), (0.2, 'letterswap'), (0.1, 'double'),
+                     (0.1, 'delete_double'), (0.1, 'insert_letter')]
+
+
+def choose_function():
+    '''
+    Returns a random function in proportions determined by probability_table
+    '''
+    # Create random number
+    # iterate thru PROBABILITY_TABLE
+    r = random.random()
+    function = None
+    for element in PROBABILITY_TABLE:
+        if element[0] < r:
+            r -= element[0]
+        else:
+            function = element[1]
+            break
+    return function
+
 def drunkify(in_string, drunklevel):
     '''
     string - any string
@@ -106,7 +132,7 @@ def drunkify(in_string, drunklevel):
         index = random.choice(range(len(string_list)))
         changed = None
         while changed == None:
-            action = random.choice(TABLE.keys())
+            action = choose_function()
             changed = dispatch(TABLE, action, string_list[index])
         string_list[index] = changed
     return ' '.join(string_list)
@@ -143,5 +169,6 @@ def parse_drunkness(in_string):
 
 if __name__ == '__main__':
     play_drunkify()
+    
 
  
